@@ -6,3 +6,11 @@ enum Themes {
   dark,
   light
 }
+
+
+final activeSpeech = StateProvider((ref) => Speech.pause);
+
+enum Speech{
+  play,
+  pause
+}
