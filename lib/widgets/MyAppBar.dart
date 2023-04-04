@@ -1,7 +1,7 @@
 import 'package:chatgpt/providers/ActiveTheme.dart';
+import 'package:chatgpt/view/Setting.dart';
 import 'package:chatgpt/widgets/ThemeSwitch.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -18,11 +18,16 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         Row(children: [
-          Consumer(
-              builder: (context, ref , child) => Icon(ref.watch(activeTheme) == Themes.dark ? Icons.dark_mode : Icons.light_mode)
+          IconButton(
+            icon: Icon( Icons.settings,   color: Theme.of(context).colorScheme.onPrimary,),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Setting()),
+              );
+            },
           ),
-          SizedBox(width: 8,),
-          ThemeSwitch(),
+          SizedBox(width: 4,),
         ],)
       ],
     );

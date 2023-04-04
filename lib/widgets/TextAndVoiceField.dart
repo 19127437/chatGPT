@@ -27,14 +27,14 @@ class _TextAndVoiceFieldState extends ConsumerState<TextAndVoiceField> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        reply == false ? Text('')  : Text('Watting'),
+        reply == false ? const Text('')  : Text('Watting...', style: TextStyle(fontSize: 17),),
         Row(
           children: [
             // _inputMode == InputMode.voice ? ToggleButton(inputMode: _inputMode,): SizedBox(),
             Expanded(child: TextField(
               controller: _messageController,
               onChanged: (value){
-                value.isNotEmpty ? setInputMode(InputMode.text) : setInputMode(InputMode.voice);
+                value.isEmpty || value == "" ? setInputMode(InputMode.voice) : setInputMode(InputMode.text);
               },
               cursorColor: Theme.of(context).colorScheme.onPrimary,
               decoration: InputDecoration(

@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chatgpt/providers/ActiveTheme.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+import '../providers/TextToSpeech.dart';
+
 class ChatItem extends StatefulWidget {
   final String text;
   final bool isMe;
@@ -33,18 +35,14 @@ class _ChatItemState extends State<ChatItem> {
   @override
   void initState() {
     super.initState();
-    flutterTts.setLanguage("en-US");
     flutterTts.setSpeechRate(pitch);
     flutterTts.setVolume(volume);
+    if(!widget.isMe && autoSpeech) {
+      _speak(widget.text);
+    }
   }
-  void setInputMode(){
-    setState(() {
-      speech = !speech;
-    });
-  }
-
   Future<void> _speak(String text) async {
-    await flutterTts.setLanguage("en-US");
+    await flutterTts.setLanguage(setLanguage);
     setState(() {
       speech = !speech;
     });
@@ -54,6 +52,12 @@ class _ChatItemState extends State<ChatItem> {
       speech = !speech;
     });
   }
+  void setInputMode(){
+    setState(() {
+      speech = !speech;
+    });
+  }
+
 
   Future<void> _stop() async {
     setState(() {
@@ -70,7 +74,7 @@ class _ChatItemState extends State<ChatItem> {
   Widget build(BuildContext context) {
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       child: Row(
         mainAxisAlignment: widget.isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
@@ -80,7 +84,7 @@ class _ChatItemState extends State<ChatItem> {
             padding: const EdgeInsets.all(15),
             constraints: BoxConstraints( maxWidth: MediaQuery.of(context).size.width * 0.6),
             decoration: BoxDecoration(
-              color: widget.isMe? Theme.of(context).colorScheme.secondary : Colors.grey.shade800,
+              color: widget.isMe? Colors.lightBlue : Colors.grey.shade800,
               borderRadius: BorderRadius.only(
                 topLeft: const Radius.circular(15),
                 topRight: const Radius.circular(15),
@@ -102,11 +106,11 @@ class _ChatItemState extends State<ChatItem> {
               },
               style: ElevatedButton.styleFrom(
                 shape: CircleBorder(
-                  side: BorderSide(width: 2, color: Colors.red),
+                  side: BorderSide(width: 2, color: Colors.grey.shade800),
                 ),
                 padding: EdgeInsets.all(10.0),
               ),
-              child: speech? Icon( Icons.pause_circle, color: Colors.red,) :Icon( Icons.play_circle, color: Colors.red,)
+              child: speech? Icon( Icons.pause_circle, color: Colors.grey.shade800,) :Icon( Icons.play_circle, color:Colors.grey.shade800,)
           ),
           if(widget.isMe) SizedBox(width: 5),
           if(widget.isMe) IconChat(isMe: widget.isMe),
@@ -131,7 +135,7 @@ class IconChat extends StatelessWidget {
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: isMe? Theme.of(context).colorScheme.secondary : Colors.grey.shade800,
+        color: isMe? Colors.lightBlue : Colors.grey.shade800,
         borderRadius: BorderRadius.only(
           topLeft: const Radius.circular(10),
           topRight: const Radius.circular(10),
@@ -140,12 +144,19 @@ class IconChat extends StatelessWidget {
         )
       ),
       // child: Icon(isMe? Icons.person: Icons.computer, color: Theme.of(context).colorScheme.onSecondary,),
-      child: isMe?  Icon( Icons.person, color: Theme.of(context).colorScheme.onSecondary,)  : SvgPicture.asset(
-        'assets/images/my_icon.svg',
-        width: 24,
-        height: 24,
-          color: Theme.of(context).colorScheme.onSecondary
-      )
+      child: isMe?  Icon( Icons.person, color: Theme.of(context).colorScheme.onSecondary,)  :
+      // Icon( Icons.computer, color: Theme.of(context).colorScheme.onSecondary,)
+      SvgPicture.asset(
+        "assets/icons/chatgpt.svg",
+        width: 35,
+        height: 35,
+      ),
+
+      // SvgPicture.asset(
+      //   'assets/images/chatgpt-icon.svg',
+      //   width: 24,
+      //   height: 24,
+      // )
     );
   }
 }
