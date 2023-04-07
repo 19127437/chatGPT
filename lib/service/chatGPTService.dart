@@ -2,7 +2,7 @@ import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 
 class AIHandler {
   final _openAI = OpenAI.instance.build(
-      token: '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',
+      token: 'API',
       baseOption: HttpSetup(receiveTimeout: const Duration(seconds: 50)));
 
   Future<String> getResponse(String message) async {

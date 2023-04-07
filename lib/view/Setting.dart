@@ -11,6 +11,7 @@ import 'package:chatgpt/providers/ActiveTheme.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chatgpt/providers/TextToSpeech.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -144,8 +145,10 @@ class _SettingState extends State<Setting> {
                                     children: [
                                       SizedBox(height: 10,),
                                       InkWell(
-                                          onTap: () {
-                                            setLanguage = jsonDecode(textToSpeech[index].toString())["id"];
+                                          onTap: () async {
+                                            final prefs = await SharedPreferences.getInstance();
+                                            await prefs.setString('setLanguage', jsonDecode(textToSpeech[index].toString())["id"]);
+                                            setLanguage = prefs.getString('setLanguage')?? "en-US";
                                             setState(() {
                                               _isExpanded = !_isExpanded;
                                             });

@@ -73,17 +73,16 @@ class _TextAndVoiceFieldState extends ConsumerState<TextAndVoiceField> {
     setState(() {
       reply= true;
     });
-    addToList(message, true, DateTime.now().toString());
+    addToList(message, true);
     final aiResponse = await _openAi.getResponse(message);
-    addToList(aiResponse, false, DateTime.now().toString());
+    addToList(aiResponse, false);
     setState(() {
       reply= false;
     });
   }
-  void addToList(String message, bool isMe, String id) {
+  void addToList(String message, bool isMe) {
     final chats = ref.read(chatsProvider.notifier);
     chats.add(ChatModel(
-      id: id,
       message: message,
       isMe: isMe,
     ));
