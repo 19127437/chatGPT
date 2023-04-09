@@ -22,12 +22,12 @@ class _TextAndVoiceFieldState extends ConsumerState<TextAndVoiceField> {
   InputMode _inputMode = InputMode.voice;
   var reply = false;
   final _messageController = TextEditingController();
-  AIHandler _openAi = AIHandler();
+  final AIHandler _openAi = AIHandler();
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        reply == false ? const Text('')  : Text('Watting...', style: TextStyle(fontSize: 17),),
+        reply == false ? const Text('')  : const Text('Watting...', style: TextStyle(fontSize: 17),),
         Row(
           children: [
             // _inputMode == InputMode.voice ? ToggleButton(inputMode: _inputMode,): SizedBox(),

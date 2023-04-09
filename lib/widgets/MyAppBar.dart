@@ -1,8 +1,5 @@
-import 'package:chatgpt/providers/ActiveTheme.dart';
 import 'package:chatgpt/view/Setting.dart';
-import 'package:chatgpt/widgets/ThemeSwitch.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({Key? key}) : super(key: key);
@@ -23,11 +20,11 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Setting()),
+                MaterialPageRoute(builder: (context) => const Setting()),
               );
             },
           ),
-          SizedBox(width: 4,),
+          const SizedBox(width: 4,),
         ],)
       ],
     );

@@ -1,17 +1,15 @@
 import 'dart:convert';
 
-import 'package:chatgpt/providers/ChatProvider.dart';
-import 'package:chatgpt/widgets/ChatItem.dart';
-import 'package:chatgpt/widgets/MyAppBar.dart';
-import 'package:chatgpt/widgets/TextAndVoiceField.dart';
+import 'package:chatgpt/view/ChatScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chatgpt/widgets/ThemeSwitch.dart';
 import 'package:chatgpt/providers/ActiveTheme.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:chatgpt/providers/TextToSpeech.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../providers/ChatProvider.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -26,7 +24,6 @@ const textToSpeech = [
 class _SettingState extends State<Setting> {
 
   bool _isExpanded = false;
-  bool _isEnabled = false;
   bool check = true;
 
   @override
@@ -53,7 +50,7 @@ class _SettingState extends State<Setting> {
                 ),
                 child:Row(
                   children: [
-                    Text(
+                    const Text(
                       'Light Screen',
                       style: TextStyle(
                         color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500
@@ -66,15 +63,15 @@ class _SettingState extends State<Setting> {
                             Consumer(
                                 builder: (context, ref , child) => Icon(ref.watch(activeTheme) == Themes.dark ? Icons.dark_mode : Icons.light_mode)
                             ),
-                            SizedBox(width: 8,),
-                            ThemeSwitch(),
+                            const SizedBox(width: 8,),
+                            const ThemeSwitch(),
                           ],
                         )
                     ),
                   ],
                 )
               ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               Container(
                   padding: const EdgeInsets.all(15),
                   constraints: BoxConstraints( maxWidth: MediaQuery.of(context).size.width),
@@ -94,7 +91,7 @@ class _SettingState extends State<Setting> {
                         children: [
                           Column(
                             children: [
-                              SizedBox(height: 5,),
+                              const SizedBox(height: 5,),
                               Row(
                                 children: [
                                   SvgPicture.asset(
@@ -103,7 +100,7 @@ class _SettingState extends State<Setting> {
                                     width: 35,
                                     height: 35,
                                   ),
-                                  SizedBox(width: 5,),
+                                  const SizedBox(width: 5,),
                                   Text(
                                     setLanguage.toString() == "en-US" ?  'English' : 'Vietnamese',
                                     style: const TextStyle(
@@ -134,7 +131,7 @@ class _SettingState extends State<Setting> {
 
                         ],
                       ),
-                      SizedBox(height: 10,),
+                      const SizedBox(height: 10,),
                       if (_isExpanded)
                         Wrap(
                             spacing: 6,
@@ -143,9 +140,9 @@ class _SettingState extends State<Setting> {
                               textToSpeech.length,
                                   (index) =>Column(
                                     children: [
-                                      SizedBox(height: 10,),
+                                      const SizedBox(height: 10,),
                                       InkWell(
-                                          onTap: () async {
+                                          onTap: (  ) async {
                                             final prefs = await SharedPreferences.getInstance();
                                             await prefs.setString('setLanguage', jsonDecode(textToSpeech[index].toString())["id"]);
                                             setLanguage = prefs.getString('setLanguage')?? "en-US";
@@ -161,13 +158,13 @@ class _SettingState extends State<Setting> {
                                                 width: 35,
                                                 height: 35,
                                               ),
-                                              SizedBox(width: 10,),
-                                              Text( jsonDecode(textToSpeech[index].toString())["name"] ,  style: TextStyle(fontSize: 16,
+                                              const SizedBox(width: 10,),
+                                              Text( jsonDecode(textToSpeech[index].toString())["name"] ,  style: const TextStyle(fontSize: 16,
                                               ),),
                                             ],
                                           )
                                       ),
-                                      SizedBox(height: 10,),
+                                      const SizedBox(height: 10,),
                                       Container(
                                         height: 1,
                                         decoration: const BoxDecoration(
@@ -186,7 +183,7 @@ class _SettingState extends State<Setting> {
                     ],
                   ),
               ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               Container(
                   padding: const EdgeInsets.all(15),
                   constraints: BoxConstraints( maxWidth: MediaQuery.of(context).size.width),
@@ -211,7 +208,6 @@ class _SettingState extends State<Setting> {
                                 onChanged: (value) {
                                   setState(() {
                                     autoSpeech = !autoSpeech;
-                                    print(autoSpeech);
                                   });
                                 },
                               ),
@@ -220,6 +216,36 @@ class _SettingState extends State<Setting> {
                       ),
                     ],
                   )
+              ),
+              const SizedBox(height: 10,),
+              Consumer(
+                builder: (context, ref , child ){
+                  return InkWell(
+                    onTap: () async {
+                      deleteChatModel();
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const ChatScreen()));
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.all(15),
+                        constraints: BoxConstraints( maxWidth: MediaQuery.of(context).size.width),
+                        decoration: BoxDecoration(
+                            color: Colors.red.shade300,
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children:  const [
+                            Text(
+                              'DELETE CHAT',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                  );
+                },
               ),
             ],
           ),

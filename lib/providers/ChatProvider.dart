@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:convert';
 import 'package:chatgpt/models/chatModel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +9,6 @@ import 'dart:async';
 List<String> localChatModel=[];
 String jsonStringChatModel = "";
 List<ChatModel> listChatModel = [];
-
 Future<void> getChatModel()  async {
   final prefs = await SharedPreferences.getInstance();
   localChatModel = prefs.getStringList('chats')?? [];
@@ -17,7 +18,13 @@ Future<void> getChatModel()  async {
         .toList();
   }
 }
+Future<void> deleteChatModel() async {
+  final prefs = await SharedPreferences.getInstance();
+  listChatModel=[];
+  await prefs.setStringList('chats', []);
 
+
+}
 class ChatNotifier extends StateNotifier<List<ChatModel>>{
   ChatNotifier(): super([]);
   void add(ChatModel chatModel) async{

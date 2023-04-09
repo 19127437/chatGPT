@@ -1,8 +1,5 @@
-import 'package:chatgpt/providers/ActiveTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:chatgpt/providers/ActiveTheme.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 import '../providers/TextToSpeech.dart';
@@ -19,7 +16,6 @@ enum TtsState { playing, stopped, paused, continued }
 
 class _ChatItemState extends State<ChatItem> {
   bool speech = false;
-  bool _isListening = false;
   String? language;
   String? engine;
   double volume = 0.5;
@@ -139,24 +135,17 @@ class IconChat extends StatelessWidget {
         borderRadius: BorderRadius.only(
           topLeft: const Radius.circular(10),
           topRight: const Radius.circular(10),
-          bottomLeft:  Radius.circular(isMe ? 0 :15),
+          bottomLeft:  Radius.circular(isMe ? 0 :10),
           bottomRight:  Radius.circular(isMe? 15: 0),
         )
       ),
-      // child: Icon(isMe? Icons.person: Icons.computer, color: Theme.of(context).colorScheme.onSecondary,),
       child: isMe?  Icon( Icons.person, color: Theme.of(context).colorScheme.onSecondary,)  :
-      // Icon( Icons.computer, color: Theme.of(context).colorScheme.onSecondary,)
       SvgPicture.asset(
         "assets/icons/chatgpt.svg",
         width: 35,
         height: 35,
       ),
 
-      // SvgPicture.asset(
-      //   'assets/images/chatgpt-icon.svg',
-      //   width: 24,
-      //   height: 24,
-      // )
     );
   }
 }
