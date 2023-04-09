@@ -42,6 +42,8 @@ dependencies:
   ffi: ^2.0.1
   flutter_tts: ^3.6.3
   shared_preferences: ^2.1.0
+  speech_to_text: ^6.1.1
+  avatar_glow: ^2.0.2
 
 dev_dependencies:
   flutter_test:
@@ -67,7 +69,10 @@ flutter:
   assets:
     - assets/icons/chatgpt.svg
     - assets/icons/england.svg
-    - assets/icons/vietnam.svg
+    - assets/icons/Vietnam.svg
+    - assets/icons/Croatia.svg
+    - assets/icons/Germany.svg
+    - assets/icons/Russia.svg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,6 +1,7 @@
 import 'package:chatgpt/models/chatModel.dart';
 import 'package:chatgpt/providers/ChatProvider.dart';
 import 'package:chatgpt/service/chatGPTService.dart';
+import 'package:chatgpt/service/voiceChatGPT.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,20 +22,30 @@ class TextAndVoiceField extends ConsumerStatefulWidget {
 class _TextAndVoiceFieldState extends ConsumerState<TextAndVoiceField> {
   InputMode _inputMode = InputMode.voice;
   var reply = false;
+  var _listening = false;
+
   final _messageController = TextEditingController();
   final AIHandler _openAi = AIHandler();
+  final VoiceHandler voiceHandler = VoiceHandler();
+
+  @override
+  void initState(){
+    voiceHandler.initSpeech();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        reply == false ? const Text('')  : const Text('Watting...', style: TextStyle(fontSize: 17),),
+        reply == false ? const Text('')  : const Text('Waiting for reply...', style: TextStyle(fontSize: 16, color: Colors.grey),),
+        const SizedBox(height: 5,),
         Row(
           children: [
             // _inputMode == InputMode.voice ? ToggleButton(inputMode: _inputMode,): SizedBox(),
             Expanded(child: TextField(
               controller: _messageController,
               onChanged: (value){
-                value.isEmpty || value == "" ? setInputMode(InputMode.voice) : setInputMode(InputMode.text);
+                value.isEmpty || value.length == 0 ? setInputMode(InputMode.voice) : setInputMode(InputMode.text);
               },
               cursorColor: Theme.of(context).colorScheme.onPrimary,
               decoration: InputDecoration(
@@ -52,6 +63,8 @@ class _TextAndVoiceFieldState extends ConsumerState<TextAndVoiceField> {
             ),
             ToggleButton(
               inputMode: _inputMode,
+              reply: reply,
+              listening: _listening,
               sendText: (){
                 final mess = _messageController.text;
                 _messageController.clear();
@@ -69,6 +82,11 @@ class _TextAndVoiceFieldState extends ConsumerState<TextAndVoiceField> {
       _inputMode = inputMode;
     });
   }
+  void setListeningState(bool check) {
+    setState(() {
+      _listening = check;
+    });
+  }
   Future<void> sendTextMessage(String message) async {
     setState(() {
       reply= true;
@@ -79,6 +97,9 @@ class _TextAndVoiceFieldState extends ConsumerState<TextAndVoiceField> {
     setState(() {
       reply= false;
     });
+    setListeningState(false);
+
+    setInputMode(InputMode.voice);
   }
   void addToList(String message, bool isMe) {
     final chats = ref.read(chatsProvider.notifier);
@@ -87,5 +108,15 @@ class _TextAndVoiceFieldState extends ConsumerState<TextAndVoiceField> {
       isMe: isMe,
     ));
   }
-  void sendVoiceMessage(){}
+  void sendVoiceMessage() async {
+    if(voiceHandler.speechToText.isListening){
+      await voiceHandler.stopListening();
+      setListeningState(false);
+    }else{
+      setListeningState(true);
+      final result = await voiceHandler.startListening();
+      setListeningState(false);
+      sendTextMessage(result);
+    }
+  }
 }

@@ -9,6 +9,9 @@ import 'dart:async';
 List<String> localChatModel=[];
 String jsonStringChatModel = "";
 List<ChatModel> listChatModel = [];
+
+String setLanguageSpeech = "en-US" ;
+
 Future<void> getChatModel()  async {
   final prefs = await SharedPreferences.getInstance();
   localChatModel = prefs.getStringList('chats')?? [];
@@ -35,6 +38,7 @@ class ChatNotifier extends StateNotifier<List<ChatModel>>{
     await prefs.setStringList('chats', listChatModel.map((map) => jsonEncode(map)).toList());
     getChatModel();
   }
+
 }
 
 final chatsProvider = StateNotifierProvider<ChatNotifier,List<ChatModel>>((ref) => ChatNotifier(),argument: getChatModel(),);
