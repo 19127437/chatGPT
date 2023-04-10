@@ -18,7 +18,7 @@ class Setting extends StatefulWidget {
   State<Setting> createState() => _SettingState();
 }
 const textToSpeech = [
-  '{"name": "English","id":"en-US"}','{"name": "Vietnamese","id":"vi-VN"}'
+  '{"name": "English","id":"en-US"}','{"name": "Vietnam","id":"vi-VN"}'
 ];
 
 const speechToText = [

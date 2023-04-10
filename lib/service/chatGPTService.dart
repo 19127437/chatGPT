@@ -6,7 +6,7 @@ import 'package:chatgpt/providers/ChatProvider.dart';
 
 class AIHandler {
   final _openAI = OpenAI.instance.build(
-      token: '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',
+      token: 'API',
       baseOption: HttpSetup(receiveTimeout: const Duration(seconds: 60)));
   List<Map<String, String>> history = [];
 

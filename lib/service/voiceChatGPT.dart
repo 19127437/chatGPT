@@ -42,7 +42,7 @@ class VoiceHandler {
           completer.complete(result.recognizedWords);
         }
       },
-      // listenFor: Duration(seconds: 30),
+      listenFor: Duration(seconds: 30),
       localeId: setLanguageSpeech,
       listenMode: ListenMode.confirmation,
     );
